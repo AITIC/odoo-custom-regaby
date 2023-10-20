@@ -92,7 +92,7 @@ odoo.define('l10n_ar_pos_einvoice_ticket', function (require) {
                             self.get_order().l10n_ar_afip_auth_code = invoices[0]['l10n_ar_afip_auth_code'];
                             self.get_order().l10n_ar_afip_auth_code_due = invoices[0]['l10n_ar_afip_auth_code_due'];
                             self.get_order().l10n_latam_document_type_id = invoices[0]['l10n_latam_document_type_id'][1].split(" ")[0];
-                            self.get_order().l10n_latam_document_name = invoices[0]['l10n_latam_document_type_id'][1].substr(invoices[0]['l10n_latam_document_type_id'][1].indexOf(" ") + 1);
+                            self.get_order().l10n_latam_document_number = invoices[0]['l10n_latam_document_type_id'][1].substr(invoices[0]['l10n_latam_document_type_id'][1].indexOf(" ") + 1);
                         });
                     }).catch(function(error){
                         return result
