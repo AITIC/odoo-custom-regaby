@@ -93,6 +93,7 @@
                     </span>
                 </div>
                 </strong>
+
             <hr />
         </xpath>
         <xpath expr="//div[@class='before-footer']" position="after">
@@ -116,7 +117,12 @@
                     <t t-if="isSimple(line)">
                         <div>
                             <t t-esc="line.product_name_wrapped[0]" />
-                            <span t-esc="env.pos.format_currency_no_symbol(line.price_display)" class="price_display pos-receipt-right-align"/>
+                            <t t-if="env.pos.get_order().l10n_ar_include_vat">
+                                <span t-esc="env.pos.format_currency_no_symbol(line.price_with_tax)" class="price_display pos-receipt-right-align"/>
+                            </t>
+                            <t t-else="">
+                                <span t-esc="env.pos.format_currency_no_symbol(line.price_without_tax)" class="price_display pos-receipt-right-align"/>
+                            </t>
                         </div>
                         <WrappedProductNameLines line="line" />
                     </t>
@@ -178,7 +184,7 @@
                         <div class="pos-receipt-right-align">--------</div>
                     <br/>
                     <div><strong>Subtotal</strong><span t-esc='env.pos.format_currency(receipt.subtotal)' class="pos-receipt-right-align"/></div>
-                    <t t-foreach='receipt.tax_details' t-as='tax'>
+                    <t t-foreach='receipt.tax_details' t-as='tax' t-key='tax.id'>
                         <div>
                             <strong><t t-esc='tax.name' /></strong>
                             <span t-esc='env.pos.format_currency_no_symbol(tax.amount)' class="pos-receipt-right-align"/>
@@ -189,7 +195,7 @@
                         <div class="pos-receipt-right-align">--------</div>
                     <br/>
                     <div><strong>Subtotal</strong><span t-esc='env.pos.format_currency(receipt.total_without_tax)' class="pos-receipt-right-align"/></div>
-                    <t t-foreach='receipt.tax_details' t-as='tax'>
+                    <t t-foreach='receipt.tax_details' t-as='tax' t-key='tax.id'>
                         <div>
                             <strong><t t-esc='tax.name' /></strong>
                             <span t-esc='env.pos.format_currency_no_symbol(tax.amount)' class="pos-receipt-right-align"/>
