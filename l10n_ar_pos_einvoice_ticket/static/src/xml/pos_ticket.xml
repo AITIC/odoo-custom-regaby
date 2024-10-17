@@ -104,9 +104,9 @@
                             <img t-attf-src="/report/barcode/?type={{'QR'}}&amp;value={{env.pos.get_order().l10n_ar_afip_qr_code}}&amp;width={{180}}&amp;height={{180}}" style="width:180px;height:180px" />
                         </div>
                     </t>
-                    <strong>CAE:</strong> <t t-esc="env.pos.get_order().l10n_ar_afip_auth_code"/>
+                    <strong> <t t-esc="env.pos.get_order().l10n_ar_afip_auth_mode"/>:</strong> <t t-esc="env.pos.get_order().l10n_ar_afip_auth_code"/>
                     <div style="margin-top:3px;">
-                        <strong>Vto. CAE:</strong> <t t-esc="env.pos.get_order().l10n_ar_afip_auth_code_due"/>
+                        <strong>Vto. <t t-esc="env.pos.get_order().l10n_ar_afip_auth_mode"/> :</strong> <t t-esc="env.pos.get_order().l10n_ar_afip_auth_code_due"/>
                     </div>
                 </div>
             </t>
