@@ -83,10 +83,11 @@
                     <div>Servido por <t t-esc='receipt.cashier' /></div>
                 </div>
             </t>
-            <t t-if='receipt.table_id'>
+    
+            <t t-if='receipt.table'>
                 <div class='cashier'>
                     <hr />
-                    <div>Número de mesa <t t-esc='receipt.table_id' /></div>
+                    <div>Número de mesa <t t-esc='receipt.table' /></div>
                 </div>
             </t>
             <hr />
@@ -101,6 +102,7 @@
                 </strong>
 
             <hr />
+           
         </xpath>
         <xpath expr="//div[@class='before-footer']" position="after">
             <t t-if="env.pos.get_order().l10n_ar_afip_auth_code and props.order.pos.config.receipt_invoice_number">
