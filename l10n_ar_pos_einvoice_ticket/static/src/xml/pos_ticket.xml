@@ -83,6 +83,12 @@
                     <div>Servido por <t t-esc='receipt.cashier' /></div>
                 </div>
             </t>
+            <t t-if='receipt.table_id'>
+                <div class='cashier'>
+                    <hr />
+                    <div>Número de mesa <t t-esc='receipt.table_id' /></div>
+                </div>
+            </t>
             <hr />
                 <strong>
                 <div>DESCRIPCIÓN</div>
