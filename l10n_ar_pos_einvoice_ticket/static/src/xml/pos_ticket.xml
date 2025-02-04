@@ -212,6 +212,39 @@
                 </t>
             </div>
         </xpath>
+        <!-- FASE I: regimen de transparencia fiscal al consumidor 
+        Los comprobantes emitidos a consumidores finales o exentos (comprobantes B) por parte 
+        de los responsables inscriptos deberán discriminar el Impuesto al Valor Agregado (IVA)
+        y otros impuestos indirectos Nacionales.-->
+        <xpath expr="//div[@class='pos-receipt-amount']" position="after">
+            <t t-set="general_customer" t-value="receipt.client.l10n_ar_afip_responsibility_type_id == env.pos.get_order().general_customer_id"/>
+            <t t-if="env.pos.get_order().invoice_letter == 'B' or general_customer">
+                <hr />
+                <div style="font-size:8pt !important">
+                    <strong>RÉGIMEN DE TRANSPARENCIA FISCAL AL CONSUMIDOR</strong>
+                </div>
+                <div style="font-size:10pt !important">
+                    <t t-foreach="receipt.tax_details" t-as="tax">
+                        <div t-if="tax.name.substring(0, 3) === 'IVA'">
+                            <span t-esc="tax.name" />
+                            <span t-esc="env.pos.format_currency_no_symbol(tax.amount)" class="pos-receipt-right-align"/>
+                        </div>
+                    </t>
+                </div>
+                <div style="font-size:10pt !important">
+                    <span>Otros tributos nac. que inciden en el precio</span>
+                </div>
+                <div style="font-size:10pt !important">
+                    <t t-foreach="receipt.tax_details" t-as="tax">
+                        <div t-if="tax.name.substring(0, 3) !== 'IVA'">
+                            <span t-esc="tax.name" />
+                            <span t-esc="env.pos.format_currency_no_symbol(tax.amount)" class="pos-receipt-right-align"/>
+                        </div>
+                    </t>
+                </div>
+                <hr />
+            </t>
+        </xpath>
         <xpath expr="//t[@t-if='isTaxIncluded']" position="replace">
         </xpath>
         <xpath expr="//t[@t-if='!isTaxIncluded']" position="replace">

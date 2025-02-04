@@ -42,6 +42,17 @@ odoo.define('l10n_ar_pos_einvoice_ticket', function (require) {
             if (this.pos.config.default_partner_id) {
             	this.set_client(this.pos.db.get_partner_by_id(this.pos.config.default_partner_id[0]));
             }
+            // Buscar el ID del 'l10n_ar.afip.responsibility.type' de Consumidor final
+            var self = this;
+            rpc.query({
+                model: 'l10n_ar.afip.responsibility.type',
+                method: 'search_read',
+                args: [[['code', '=', '5']]],
+            }).then(function(result) {
+                if (result.length > 0) {
+                    self.general_customer_id = result[0].id;
+                }
+            });
         },
         init_from_JSON: function (json) {
             var res = _super_Order.init_from_JSON.apply(this, arguments);
