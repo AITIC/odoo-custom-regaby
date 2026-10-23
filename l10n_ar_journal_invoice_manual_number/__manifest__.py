@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Journal Invoice Manual Number',
-    'version': '0.1',
+    'version': '19.0.0.1.0',
     'author': 'Ing. Gabriela Rivero',
     'license': 'LGPL-3',
     'category': 'Product',
@@ -11,12 +11,10 @@
     Por lo tanto, se agrega en el journal un tilde Número manual (manual_number). Luego en la factura si está seteado ese tilde se muestra \
     un campo llamado igual.
     """,
-    'depends': ['account_document'],
+    'depends': ['l10n_latam_invoice_document'],
     'data': [
         'views/journal_view.xml',
         'views/invoice_view.xml',
-    ],
-    'qweb': [
     ],
     'installable': False,
 }

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'POS Scan Default Code',
-    'version': '0.1',
+    'version': '19.0.0.1.0',
     'author': 'Ing. Gabriela Rivero',
     'license': 'LGPL-3',
     'category': 'Point Of Sale',
@@ -9,10 +9,12 @@
     'summary': 'This module allows scan default code in POS and by a new product field modelo_articulo',
     'depends': ['point_of_sale'],
     'data': [
-        'views/pos_scan_default_code.xml',
         'views/product_view.xml',
     ],
-    'qweb': [
-    ],
+    'assets': {
+        'point_of_sale._assets_pos': [
+            '/pos_scan_default_code/static/src/js/pos_scan.js',
+        ],
+    },
     'installable': False,
 }

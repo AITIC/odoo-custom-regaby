@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Padron Afip',
-    'version': '0.1',
+    'version': '19.0.0.1.0',
     'author': 'Localizacion arg.',
     'license': 'LGPL-3',
     'category': 'Localization/Argentina',
@@ -10,8 +10,6 @@
     'data': [
         'wizard/res_partner_update_from_padron_wizard_view.xml',
         'security/ir.model.access.csv',
-    ],
-    'qweb': [
     ],
     'installable': True,
 }

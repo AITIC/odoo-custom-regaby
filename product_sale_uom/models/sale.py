@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
-from odoo.addons import decimal_precision as dp
+
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    @api.multi
     @api.onchange('product_id')
     def product_id_change(self):
         res = super(SaleOrderLine, self).product_id_change()
@@ -15,10 +14,8 @@ class SaleOrderLine(models.Model):
         self.update(vals)
         return res
 
-    @api.multi
     @api.onchange('product_uom_original', 'product_uom_qty_original')
     def uom_original_change(self):
-        ## Debo buscar la relacion udm y actualizar campos product_uom y product_uom_qty
         if not self.product_id:
             return {'domain': {'product_uom_original': []}}
         vals = {}
@@ -32,12 +29,15 @@ class SaleOrderLine(models.Model):
         return result
 
     product_uom_original = fields.Many2one('uom.uom', 'Unit of Measure Sale', required=False)
-    product_uom_qty_original = fields.Float(string='Quantity', digits=dp.get_precision('Product Unit of Measure'), required=False, default=1.0)
+    product_uom_qty_original = fields.Float(
+        string='Quantity',
+        digits='Product Unit of Measure',
+        required=False,
+        default=1.0,
+    )
 
-
-    @api.multi
-    def _prepare_invoice_line(self, qty):
-        res = super(SaleOrderLine, self)._prepare_invoice_line(qty)
+    def _prepare_invoice_line(self, **optional_values):
+        res = super(SaleOrderLine, self)._prepare_invoice_line(**optional_values)
         res['product_uom_original'] = self.product_uom_original.id
         res['product_qty_original'] = self.product_uom_qty_original
         return res

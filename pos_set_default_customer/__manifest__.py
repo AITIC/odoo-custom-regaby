@@ -9,13 +9,17 @@
     "support": "ipredictitsolutions@gmail.com",
 
     'category': 'Point of Sale',
-    'version': '13.0.0.1.0',
+    'version': '19.0.0.1.0',
     'depends': ['point_of_sale'],
 
     'data': [
-        'views/assets.xml',
         'views/pos_config_view.xml',
     ],
+    'assets': {
+        'point_of_sale._assets_pos': [
+            '/pos_set_default_customer/static/src/js/get_customer.js',
+        ],
+    },
 
     'license': "OPL-1",
 

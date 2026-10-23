@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Invoice Supplier Document Number Unique',
-    'version': '0.1',
+    'version': '19.0.0.1.0',
     'author': 'Ing. Gabriela Rivero',
     'license': 'LGPL-3',
     'category': 'Product',
@@ -12,8 +12,6 @@
     """,
     'depends': ['account_invoice_supplier_ref_unique'],
     'data': [
-    ],
-    'qweb': [
     ],
     'installable': False,
 }

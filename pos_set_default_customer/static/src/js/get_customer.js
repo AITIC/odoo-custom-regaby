@@ -1,15 +1,15 @@
-odoo.define('pos_set_default_customer.GetCustomer', function(require) {
-    "use strict";
+import { patch } from "@web/core/utils/patch";
+import { PosOrder } from "@point_of_sale/app/models/pos_order";
 
-    var models = require('point_of_sale.models');
-
-    var _super_order = models.Order.prototype;
-    models.Order = models.Order.extend({
-        initialize: function() {
-            _super_order.initialize.apply(this, arguments);
-            if (this.pos.config.default_partner_id) {
-            	this.set_client(this.pos.db.get_partner_by_id(this.pos.config.default_partner_id[0]));
+patch(PosOrder.prototype, {
+    setup(vals, models) {
+        super.setup(vals, models);
+        const config = this.pos?.config;
+        if (config?.default_partner_id && !this.partner_id) {
+            const partner = this.pos.models["res.partner"].get(config.default_partner_id);
+            if (partner) {
+                this.partner_id = partner;
             }
-        },
-    });
+        }
+    },
 });

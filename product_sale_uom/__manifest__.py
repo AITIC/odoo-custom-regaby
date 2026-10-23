@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Produc Sale UOM',
-    'version': '0.1',
+    'version': '19.0.0.1.0',
     'author': 'Ing. Gabriela Rivero',
     'license': 'LGPL-3',
     'category': 'Product',
@@ -13,8 +13,6 @@
         'views/sale_view.xml',
         'views/stock_view.xml',
         'views/invoice_view.xml',
-    ],
-    'qweb': [
     ],
     'installable': False,
 }

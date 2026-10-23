@@ -3,6 +3,7 @@ from odoo import fields, http, SUPERUSER_ID, tools, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.addons.website_event.controllers.main import WebsiteEventController
 from werkzeug.exceptions import Forbidden, NotFound
+from urllib.parse import urlencode
 import stdnum.ar
 import werkzeug
 import logging
@@ -57,5 +58,5 @@ class WebsiteEventController(WebsiteEventController):
         attendees_sudo = self._create_attendees_from_registration_post(event, registrations)
         for attendance in attendees_sudo:
             attendance.code_id = event_draft_id.id
-        return request.redirect(('/event/%s/registration/success?' % event.id) + werkzeug.urls.url_encode({'registration_ids': ",".join([str(id) for id in attendees_sudo.ids])}))
-
+        params = urlencode({'registration_ids': ",".join([str(id) for id in attendees_sudo.ids])})
+        return request.redirect(('/event/%s/registration/success?' % event.id) + params)

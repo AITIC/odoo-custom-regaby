@@ -10,9 +10,9 @@
                                 <span t-else="">Registration</span>
                             </h6>
                             <small t-if="tickets.end_sale_datetime and tickets.sale_available and not tickets.is_expired" class="text-muted mr-3" itemprop="availabilityEnds">Sales end on
-                                <span itemprop="priceValidUntil" t-esc="tickets.end_sale_datetime"
+                                <span itemprop="priceValidUntil" t-out="tickets.end_sale_datetime"
                                     t-options="{'widget': 'datetime', 'tz_name': event.date_tz, 'format': 'short'}"/>
-                                <span t-esc="tickets.event_id.date_tz"/>
+                                <span t-out="tickets.event_id.date_tz"/>
                             </small>
                             <div class="ml-auto o_wevent_nowrap">
                                 <span class="text-dark font-weight-bold align-middle px-2">Código de Invitación</span>
@@ -24,7 +24,7 @@
                                     <t t-set="seats_max_event" t-value="(not event.seats_limited or event.seats_available &gt; 9) and 10 or event.seats_available + 1"/>
                                     <t t-set="seats_max" t-value="min(seats_max_ticket, seats_max_event) if tickets else seats_max_event"/>
                                     <t t-foreach="range(0, seats_max)" t-as="nb">
-                                        <option t-esc="nb" t-att-selected="nb == 1 and 'selected'"/>
+                                        <option t-out="nb" t-att-selected="nb == 1 and 'selected'"/>
                                     </t>
                                 </select>
                             </div>

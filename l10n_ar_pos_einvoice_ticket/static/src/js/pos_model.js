@@ -1,123 +1,48 @@
-odoo.define('l10n_ar_pos_einvoice_ticket', function (require) {
-    "use strict";
+import { patch } from "@web/core/utils/patch";
+import { PosOrder } from "@point_of_sale/app/models/pos_order";
+import { PosStore } from "@point_of_sale/app/services/pos_store";
+import { PaymentScreen } from "@point_of_sale/app/screens/payment_screen/payment_screen";
 
-    var models = require('point_of_sale.models');
-    var rpc = require('web.rpc');
-    models.load_fields('res.partner', ['l10n_ar_afip_responsibility_type_id','l10n_latam_identification_type_id']);
-    models.load_fields('res.company', [
-        'l10n_ar_afip_start_date',
-        'l10n_ar_gross_income_number',
-        'l10n_ar_afip_responsibility_type_id',
-        'street',
-        'city',
-        'state_id',
-        'country_id',
-    ]);
+// Load extra partner fields needed for AR invoice ticket
+patch(PosStore.prototype, {
+    async processServerData() {
+        await super.processServerData();
+        // Load afip responsibility type for general customer check
+        if (!this._generalCustomerId && this.models["l10n_ar.afip.responsibility.type"]) {
+            const cfType = this.models["l10n_ar.afip.responsibility.type"].find(
+                (r) => r.code === "5"
+            );
+            this._generalCustomerId = cfType?.id;
+        }
+    },
+    get generalCustomerId() {
+        return this._generalCustomerId;
+    },
+});
 
-    var pos_model = require("point_of_sale.models");
-    var SuperPosModel = pos_model.PosModel.prototype;
-
-    const PaymentScreen = require('point_of_sale.PaymentScreen');
-    const { useListener } = require('web.custom_hooks');
-    const Registries = require('point_of_sale.Registries');
-
-    var _super_Order = models.Order.prototype;
-    models.Order = models.Order.extend({
-
-         renderElement: function() {
-            var self = this;
-            this._super();
-
-            if (this.pos.config.pos_auto_invoice) {
-               this.$('.js_invoice').addClass('oe_hidden');
-            }
-        },
-
-
-        initialize: function (attributes, options) {
-            _super_Order.initialize.apply(this, arguments);
-            if (this.pos.config.pos_auto_invoice) {
-                this.to_invoice = true;
-            }
-            if (this.pos.config.default_partner_id) {
-            	this.set_client(this.pos.db.get_partner_by_id(this.pos.config.default_partner_id[0]));
-            }
-            // Buscar el ID del 'l10n_ar.afip.responsibility.type' de Consumidor final
-            var self = this;
-            rpc.query({
-                model: 'l10n_ar.afip.responsibility.type',
-                method: 'search_read',
-                args: [[['code', '=', '5']]],
-            }).then(function(result) {
-                if (result.length > 0) {
-                    self.general_customer_id = result[0].id;
-                }
-            });
-        },
-        init_from_JSON: function (json) {
-            var res = _super_Order.init_from_JSON.apply(this, arguments);
-            if (json.to_invoice) {
-                this.to_invoice = json.to_invoice;
-
+// Auto-invoice and default partner logic
+patch(PosOrder.prototype, {
+    setup(vals, models) {
+        super.setup(vals, models);
+        const config = this.pos?.config;
+        if (config?.pos_auto_invoice) {
+            this.to_invoice = true;
+        }
+        if (config?.default_partner_id && !this.partner_id) {
+            const partner = this.pos.models["res.partner"].get(config.default_partner_id);
+            if (partner) {
+                this.partner_id = partner;
             }
         }
-    });
+    },
+});
 
-    pos_model.PosModel = pos_model.PosModel.extend({
-
-        _flush_orders: function(orders, options) {
-
-            var self = this;
-            var result, data;
-            result = data = SuperPosModel._flush_orders.call(this,orders, options)
-            _.each(orders,function(order){
-                if (order.to_invoice)
-                var order = self.env.pos.get_order();
-                data.then(function(order_server_id){
-                    var domain = [['pos_reference', '=', order['name']]]
-                    var fields = ['account_move'];
-
-
-                    rpc.query({
-                        model: 'pos.order',
-                        method: 'search_read',
-                        args: [domain, fields],
-                    }).then(function(output){
-                        var invoice_number = output[0]['account_move'][1].split(" ")[1];
-                        var invoice_letter = output[0]['account_move'][1].split(" ")[0].substring(3, 4);
-                        self.get_order().invoice_number = invoice_number;
-                        self.get_order().invoice_letter = invoice_letter;
-                        var account_move = output[0]['account_move'][0]
-                        rpc.query({
-                            model: 'account.move',
-                            method: 'search_read',
-                            args: [[['id', '=', account_move]], ['l10n_ar_afip_auth_code',
-                                                                 'l10n_ar_afip_auth_code_due',
-                                                                 'l10n_ar_afip_qr_code',
-                                                                 'l10n_latam_document_type_id',
-                                                                 'l10n_ar_include_vat',
-                                                                 'l10n_ar_afip_auth_mode',
-                                                                ]],
-                           }
-
-                        ).then(function (invoices) {
-                            self.get_order().l10n_ar_afip_qr_code = invoices[0]['l10n_ar_afip_qr_code'];
-                            self.get_order().l10n_ar_afip_auth_code = invoices[0]['l10n_ar_afip_auth_code'];
-                            self.get_order().l10n_ar_afip_auth_code_due = invoices[0]['l10n_ar_afip_auth_code_due'];
-                            self.get_order().l10n_latam_document_type_id = invoices[0]['l10n_latam_document_type_id'][1].split(" ")[0];
-                            self.get_order().l10n_latam_document_number = invoices[0]['l10n_latam_document_type_id'][1].substr(invoices[0]['l10n_latam_document_type_id'][1].indexOf(" ") + 1);
-                            self.get_order().l10n_ar_include_vat = invoices[0]['l10n_ar_include_vat'];
-                            self.get_order().l10n_ar_afip_auth_mode = invoices[0]['l10n_ar_afip_auth_mode'];
-                        });
-                    }).catch(function(error){
-                        return result
-                    })
-                })
-            })
-            return result
-
-        },
-
-    })
-
+// On payment screen mount, auto-set invoice flag
+patch(PaymentScreen.prototype, {
+    onMounted() {
+        super.onMounted();
+        if (this.pos.config.pos_auto_invoice) {
+            this.currentOrder.setToInvoice(true);
+        }
+    },
 });
