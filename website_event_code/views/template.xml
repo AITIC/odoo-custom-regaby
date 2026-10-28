@@ -1,5 +1,4 @@
 <odoo>
-    <data>
         <template id="registration_template_inherit_event_code" inherit_id="website_event.registration_template" >
             <xpath expr="//div[hasclass('o_wevent_registration_single')]" position="replace">
                 <div t-else="" class="o_wevent_registration_single">
@@ -78,5 +77,4 @@
                 </div>
             </div>
         </template>
-    </data>
 </odoo>

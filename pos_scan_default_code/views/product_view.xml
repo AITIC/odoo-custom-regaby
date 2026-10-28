@@ -1,5 +1,4 @@
 <odoo>
-    <data>
 
        <record model="ir.ui.view" id="product_template_only_form_view_inherit">
             <field name="name">product.template</field>
@@ -12,5 +11,4 @@
             </field>
         </record>
 
-    </data>
 </odoo>

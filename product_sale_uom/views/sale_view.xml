@@ -1,5 +1,4 @@
 <odoo>
-    <data>
 
        <record model="ir.ui.view" id="view_order_form_sale_uom">
             <field name="name">sale.order.form</field>
@@ -29,5 +28,4 @@
             </field>
         </record>
 
-    </data>
 </odoo>

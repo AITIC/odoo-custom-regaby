@@ -1,5 +1,4 @@
 <odoo>
-    <data>
 <!-- Esta es la vista en donde se habilitan las opciones de auto_invoice"
         Dentro del apartado de Configuración del Punto de Venta -->
 
@@ -42,5 +41,4 @@
             </field>
         </record>
 
-    </data>
 </odoo>

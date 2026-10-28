@@ -1,5 +1,4 @@
 <odoo>
-    <data>
 
        <record model="ir.ui.view" id="pos_config_einvoice">
             <field name="name">pos.config</field>
@@ -19,5 +18,4 @@
             </field>
         </record>
 
-    </data>
 </odoo>

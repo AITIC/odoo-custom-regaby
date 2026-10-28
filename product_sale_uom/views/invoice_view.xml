@@ -1,5 +1,4 @@
 <odoo>
-    <data>
 
        <record model="ir.ui.view" id="invoice_form_sale_uom">
             <field name="name">account.move.form</field>
@@ -16,5 +15,4 @@
             </field>
         </record>
 
-    </data>
 </odoo>

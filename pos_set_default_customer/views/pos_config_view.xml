@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
         <record id="pos_config_view_form_inherit_ip" model="ir.ui.view">
             <field name="name">pos.config.view.form.inherit.ip</field>
             <field name="model">pos.config</field>
@@ -21,5 +20,4 @@
                 </xpath>
             </field>
         </record>
-    </data>
 </odoo>

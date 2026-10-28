@@ -1,5 +1,4 @@
 <odoo>
-    <data>
 
        <record id="view_invoice_form_inherit" model="ir.ui.view">
         <field name="name">account.document_invoice.form</field>
@@ -18,5 +17,4 @@
         </field>
     </record>
 
-    </data>
 </odoo>
